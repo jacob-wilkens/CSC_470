@@ -22,7 +22,7 @@
 (define parseInnerFunc
   (lambda (lst)
     (cond
-      ((eq? (caar lst) 'params) (cons (cdr (car lst)) (list(parseInnerFunc(list(cadr lst))))))
+      ((eq? (caar lst) 'params) (cons (cdar lst) (list(parseInnerFunc(list(cadr lst))))))
       (else (cadr(cadr(car lst)))))))
 
 (define no-unparser
@@ -30,8 +30,7 @@
     (cond
       ((eq? (car code) 'var-exp) (parsevar code))
       ((eq? (car code) 'func-exp) (parseFunc code))
-      (else (append (list 'call) (append (parseFunc (car(cdr code))) (list(parsevar (cadr(cdr code))))))))))
+      (else (append (list 'call) (cons (parseFunc (cadr code)) (list(parsevar (caddr code)))))))))
 
 (define sample-no-code '(call (function (x) x) a))
-
 (no-unparser (no-parser sample-no-code))
